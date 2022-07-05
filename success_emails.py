@@ -1,3 +1,7 @@
+# Send Test
+# Send Schedule (both interviewer and prospect)
+# Send Offer
+
 import email, smtplib, ssl
 from dotenv import load_dotenv
 import os

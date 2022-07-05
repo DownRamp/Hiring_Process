@@ -11,6 +11,9 @@ FROM_PWD = os.environ.get("api-pass")
 SMTP_SERVER = "imap.gmail.com"
 SMTP_PORT = 993
 
+# get list of current job positions
+# if not on then reject with job filled
+
 def read_email_from_gmail():
     try:
         mail = imaplib.IMAP4_SSL(SMTP_SERVER)
