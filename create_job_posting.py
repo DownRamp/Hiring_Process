@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import os
 import uuid
 from fpdf import FPDF
-import pysondb
+from pysondb import db
 
 load_dotenv()
 
@@ -112,8 +112,14 @@ class Window():
 
     def save_id(self):
         # save id to db somewhere
+        jobs=db.getDb("jobs.json")
+        jobs.add({"id": id, "title": self.entry_title.get(),
+        "description":self.entry_des.get(),"pay":self.entry_pay.get(), "setting":self.entry_set.get(), "requirements": self.entry_tech_req.get(),
+        "nice":self.entry_tech_nice.get(), "experience":self.entry_years.get(), "personality":self.entry_personality.get()})
+
         # create folder
-        pass
+        os.mkdir('Resumes/'+id) 
+        os.mkdir('Jobs/'+id) 
 
 if __name__ == "__main__":
     customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
