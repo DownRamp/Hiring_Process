@@ -37,24 +37,38 @@ def read_email_from_gmail():
                 if response_part.get('Content-Disposition') is None:
                     continue
                 fileName = response_part.get_filename()
-                if bool(fileName):
-                    filePath = os.path.join(detach_dir, 'DataFiles', fileName)
-                    if not os.path.isfile(filePath) :
-                        print fileName
-                        fp = open(filePath, 'wb')
-                        fp.write(part.get_payload(decode=True))
-                        fp.close()
                 arr = response_part[0]
                 if isinstance(arr, tuple):
                     msg = email.message_from_string(str(arr[1],'utf-8'))
                     email_subject = msg['subject']
                     email_from = msg['from']
                     # application-#id
-                    id = email_subject.split("-")[1]
-
+                    subject_val = email_subject.split("-")
+                    id = subject_val[1]
+                    if(subject_val[0] == "application"):
+                        store_resume(fileName, id, email_from)
+                    elif(subject_val[0] == "Test"):
+                        continue
+                    elif(subject_val[0] == "Schedule"):
+                        continue
 
     except Exception as e:
         traceback.print_exc()
         print(str(e))
+
+def store_resume(fileName, id, email):
+    # check if location exists
+    detach_dir = "Resumes/"+id
+    if bool(fileName):
+        filePath = os.path.join(detach_dir, 'DataFiles', fileName)
+        if not os.path.isfile(filePath):
+            print(fileName)
+            fp = open(filePath, 'wb')
+            fp.write(part.get_payload(decode=True))
+            fp.close()
+    # else reject pile flag (closed)
+    else:
+        reject=db.getDb("reject.json")
+        reject.add({"job_id": id, "email": email, "status": 1})
 
 read_email_from_gmail()

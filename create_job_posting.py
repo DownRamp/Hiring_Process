@@ -7,9 +7,11 @@ from dotenv import load_dotenv
 import os
 import uuid
 from fpdf import FPDF
-from pysondb import db
+from pymongo import MongoClient
 
 load_dotenv()
+client = MongoClient(os.environ.get("mongo_url"))
+db = client.hire
 
 id = uuid.uuid4()
 company = os.environ.get("company")
@@ -93,6 +95,8 @@ class Window():
             self.job.append(self.entry_years.get())
             self.job.append(self.entry_personality.get())
             self.job.append(benefits)
+            self.generate_pdf()
+            self.save_id()
 
     def generate_pdf(self):
         pdf = FPDF()
@@ -112,14 +116,13 @@ class Window():
 
     def save_id(self):
         # save id to db somewhere
-        jobs=db.getDb("jobs.json")
-        jobs.add({"id": id, "title": self.entry_title.get(),
+        jobs ={"id": id, "title": self.entry_title.get(),
         "description":self.entry_des.get(),"pay":self.entry_pay.get(), "setting":self.entry_set.get(), "requirements": self.entry_tech_req.get(),
-        "nice":self.entry_tech_nice.get(), "experience":self.entry_years.get(), "personality":self.entry_personality.get()})
-
+        "nice":self.entry_tech_nice.get(), "experience":self.entry_years.get(), "personality":self.entry_personality.get()}
+        result=db.hire.insert_one(jobs)
+        print(result)
         # create folder
         os.mkdir('Resumes/'+id) 
-        os.mkdir('Jobs/'+id) 
 
 if __name__ == "__main__":
     customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"

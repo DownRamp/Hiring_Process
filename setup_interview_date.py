@@ -1,5 +1,10 @@
 import smtplib, ssl
 
+# times submitted by interviewer
+# available times for this week and next week
+# attendant will respond and we will store their request
+# remove from available times
+
 smtp_server = "smtp.gmail.com"
 port = 587  # For starttls
 sender_email = "my@gmail.com"
