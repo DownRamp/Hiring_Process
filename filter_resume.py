@@ -11,6 +11,12 @@ difficulty = os.environ.get("difficulty")
 # add up the max total
 # 2 points for reqs and 1 point for nice to have 7/10 is the total threshold
 
+def search(dirName):
+    listOfFiles = list()
+    for (dirpath, dirnames, filenames) in os.walk(dirName):
+        listOfFiles += [os.path.join(dirpath, file) for file in filenames]
+    return listOfFiles
+
 def walkthrough():
     # search through all files in Resumes
     # send to be filtered

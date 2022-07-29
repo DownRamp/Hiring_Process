@@ -10,8 +10,10 @@ from fpdf import FPDF
 from pymongo import MongoClient
 
 load_dotenv()
-client = MongoClient(os.environ.get("mongo_url"))
-db = client.hire
+client = MongoClient(os.environ.get("DATABASE_URI"))
+mydb = client["hire_api"]
+mycol1 = mydb["applicants"]
+mycol2 = mydb["jobs"]
 
 id = uuid.uuid4()
 company = os.environ.get("company")
@@ -112,14 +114,14 @@ class Window():
                          ln = 1, align = 'L')
 
         # save the pdf with name .pdf
-        pdf.output(f"{id}.pdf")
+        pdf.output(f"Jobs/{id}.pdf")
 
     def save_id(self):
         # save id to db somewhere
         jobs ={"id": id, "title": self.entry_title.get(),
         "description":self.entry_des.get(),"pay":self.entry_pay.get(), "setting":self.entry_set.get(), "requirements": self.entry_tech_req.get(),
         "nice":self.entry_tech_nice.get(), "experience":self.entry_years.get(), "personality":self.entry_personality.get()}
-        result=db.hire.insert_one(jobs)
+        result=mycol2.insert_one(jobs)
         print(result)
         # create folder
         os.mkdir('Resumes/'+id) 

@@ -17,3 +17,5 @@
 3. setup_interview_date
 4. Send an offer
 5. Close job position
+
+source hire_api/bin/activate
