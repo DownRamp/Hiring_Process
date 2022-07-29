@@ -1,0 +1,6 @@
+pymongo==3.12.3
+django
+djangorestframework
+django-cors-headers
+djongo
+dnspy
